@@ -1,7 +1,20 @@
 from __future__ import print_function, division
 import traitlets
 
+class SourceDetection(traitlets.HasTraits):
+    """
+    Model for (automatic) source detection.
+    """
+    
+    def __init__(self):
+        super(SourceDetection, self).__init__(description='Source Detection')
+        pass
+
 class AperturePhotometry(traitlets.HasTraits):
+    """
+    Model that links to the GUI to perform the aperture
+    photometry on a given set of sources.
+    """
 
     aperture_radius = traitlets.Integer()
     annulus_inner_radius = traitlets.Integer()
@@ -18,7 +31,7 @@ class AperturePhotometry(traitlets.HasTraits):
     '''
 
     def __init__(self):
-        super(Photometry, self).__init__(description='Photometry model')
+        super(AperturePhotometry, self).__init__(description='Photometry model')
         pass
 
     @traitlets.observe()

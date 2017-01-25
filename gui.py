@@ -6,6 +6,11 @@ from reducer.image_browser import FitsViewer
 
 
 class FileSelect(Box):
+    """
+    Class that initialies a button and dropdown interface for the final
+    GUI class.
+    
+    """
     def __init__(self, fileList = [0]):
         self._aButton = Dropdown(options = fileList,
                                  value = fileList[0],
@@ -20,6 +25,11 @@ class FileSelect(Box):
                                                 width='100%'))
 
 class SettingSlider(Box):
+    """
+    Class that initalizes a linked slider and text entry interface for the final 
+    GUI class. 
+    
+    """
     def __init__(self, d = 'Description',minimum = 0.0, maximum = 50.0):
         self._slide = FloatSlider(value = minimum,
                                  min = minimum,
@@ -36,6 +46,11 @@ class SettingSlider(Box):
                                                 align_items='stretch',
                                                 width='100%'))
 class ImageViewer(Box):
+    """
+    Class that initalizes an image viewer interface for the final GUI
+    class. 
+    
+    """
     def __init__(self,image_path):
         imageOpen = open(image_path,"rb")
         image = imageOpen.read()
@@ -47,12 +62,17 @@ class ImageViewer(Box):
                                                 width='50%'))
 
 class GUI(Box):
+    """
+    Class that combines the FileSelect, SettingSlider, and ImageViewer 
+    interfaces into a cohesive GUI interface. 
+    
+    """
     def __init__(self, fileList, minimum, maximum,image_path):
         self._file = FileSelect(fileList)
         self._view = ImageViewer(image_path)
-        self._aperture = SettingSlider("Aperture", minimum, maximum)
-        self._gap = SettingSlider("Gap", minimum, maximum)
-        self._annulus = SettingSlider("Annulus", minimum, maximum)
+        self._aperture = SettingSlider("Aperture (pixels)", minimum, maximum)
+        self._gap = SettingSlider("Gap (pixels)", minimum, maximum)
+        self._annulus = SettingSlider("Annulus (pixels)", minimum, maximum)
         self._go = Button(description = 'Go!')
         super(GUI, self).__init__(children = [self._file, self._view,
                                               self._aperture, self._gap,
@@ -61,3 +81,13 @@ class GUI(Box):
                                                             flex_flow='column',
                                                             align_items='stretch',
                                                             width='50%'))
+class TabGUI(Tab):
+    """
+    Class that puts GUIs into a tabbed interface. Will eventually be 
+    implemented into the GUI class.
+    """
+    def __init__(self):
+        self._firstTab = GUI(['Mal','Simon','River'],0.0,30.0,'images/1150228.jpg')
+        self._secondTab = SettingSlider("Aperture", 2, 3)
+        super(TabGUI,self).__init__(children = [self._firstTab, self._secondTab],
+                                   _titles = {0:"First Method", 1:"Second Method"})
