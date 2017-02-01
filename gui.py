@@ -4,6 +4,7 @@ from traitlets import Integer, HasTraits, link
 from IPython.display import display
 from reducer.image_browser import FitsViewer
 
+from model import SourceDetection, AperturePhotometry
 
 class FileSelect(Box):
     """
@@ -68,6 +69,9 @@ class GUI(Box):
     
     """
     def __init__(self, fileList, minimum, maximum,image_path):
+        self.source_model = SourceDetection()
+        self.phot_model = AperturePhotometry()
+        
         self._file = FileSelect(fileList)
         self._view = ImageViewer(image_path)
         self._aperture = SettingSlider("Aperture (pixels)", minimum, maximum)

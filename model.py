@@ -7,8 +7,11 @@ class SourceDetection(traitlets.HasTraits):
     """
     
     def __init__(self):
-        super(SourceDetection, self).__init__(description='Source Detection')
-        pass
+        self._ccd = None
+        self._fwhm = None
+        self._sigma = None
+        self._iters = None
+        self._threshold = None
 
 class AperturePhotometry(traitlets.HasTraits):
     """
@@ -31,11 +34,19 @@ class AperturePhotometry(traitlets.HasTraits):
     '''
 
     def __init__(self):
-        super(AperturePhotometry, self).__init__(description='Photometry model')
-        pass
+        #super(AperturePhotometry, self).__init__(description='Photometry model')
+        self._ccd_image = None
+        self._sources = None
+        self._aperture_radius = None
+        self._inner_annulus = None
+        self._outer_annulus = None
+        self._gain = None
+        self._N_R = None
+        self._N_dark_pp = None
+        
 
-    @traitlets.observe()
-    def perform_photometry(self, change):
+    
+    def perform_photometry(self):
         pass
 
     def calc_typical_sky_pix(self):
