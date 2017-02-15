@@ -1,6 +1,6 @@
 from __future__ import print_function
 from ipywidgets import *
-from traitlets import Integer, HasTraits, link
+from traitlets import Integer, HasTraits, link, Float
 from IPython.display import display
 from reducer.image_browser import FitsViewer
 
@@ -31,6 +31,8 @@ class SettingSlider(Box):
     GUI class. 
     
     """
+    value = Float()
+    
     def __init__(self, d = 'Description',minimum = 0.0, maximum = 50.0):
         self._slide = FloatSlider(value = minimum,
                                  min = minimum,
@@ -40,12 +42,16 @@ class SettingSlider(Box):
         self._text = BoundedFloatText(value = minimum,
                                              min = minimum,
                                              max = maximum)
-        link((self._slide,'value'),(self._text,'value'))
+        
+        link((self._slide,'value'),(self._text,'value')) 
+        link((self,'value'),(self._slide,'value'))
+        
         super(SettingSlider, self).__init__(children = [self._slide, self._text],
                                 layout = Layout(display='flex',
                                                 flex_flow='row',
                                                 align_items='stretch',
                                                 width='100%'))
+    
 class ImageViewer(Box):
     """
     Class that initalizes an image viewer interface for the final GUI
@@ -68,19 +74,29 @@ class GUI(Box):
     interfaces into a cohesive GUI interface. 
     
     """
-    def __init__(self, fileList, minimum, maximum,image_path):
-        self.source_model = SourceDetection()
-        self.phot_model = AperturePhotometry()
+    def __init__(self, fileList, minimum, maximum, image_path):
+        self._source_model = SourceDetection()
+        self._phot_model = AperturePhotometry()
         
         self._file = FileSelect(fileList)
         self._view = ImageViewer(image_path)
+        
         self._aperture = SettingSlider("Aperture (pixels)", minimum, maximum)
+        link((self._aperture, 'value'),(self._phot_model, 'aperture_radius'))
+        
         self._gap = SettingSlider("Gap (pixels)", minimum, maximum)
-        self._annulus = SettingSlider("Annulus (pixels)", minimum, maximum)
+        
+        self._outer_annulus = SettingSlider("Outer Annulus (pixels)", minimum, maximum)
+        link((self._outer_annulus, 'value'),(self._phot_model, 'annulus_outer_radius'))
+        
+        self._inner_annulus = SettingSlider("Inner Annulus (pixels)", minimum, maximum)
+        link((self._inner_annulus, 'value'),(self._phot_model, 'annulus_inner_radius'))
+        
         self._go = Button(description = 'Go!')
         super(GUI, self).__init__(children = [self._file, self._view,
                                               self._aperture, self._gap,
-                                              self._annulus, self._go],
+                                              self._outer_annulus, 
+                                              self._inner_annulus, self._go],
                                             layout = Layout(display='flex',
                                                             flex_flow='column',
                                                             align_items='stretch',

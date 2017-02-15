@@ -19,9 +19,9 @@ class AperturePhotometry(traitlets.HasTraits):
     photometry on a given set of sources.
     """
 
-    aperture_radius = traitlets.Integer()
-    annulus_inner_radius = traitlets.Integer()
-    annulus_outer_radius = traitlets.Integer()
+    aperture_radius = traitlets.Float()
+    annulus_inner_radius = traitlets.Float()
+    annulus_outer_radius = traitlets.Float()
     aperture_net_counts = traitlets.Float()
     reject_outlying_pix = traitlets.Bool()
 
@@ -37,9 +37,6 @@ class AperturePhotometry(traitlets.HasTraits):
         #super(AperturePhotometry, self).__init__(description='Photometry model')
         self._ccd_image = None
         self._sources = None
-        self._aperture_radius = None
-        self._inner_annulus = None
-        self._outer_annulus = None
         self._gain = None
         self._N_R = None
         self._N_dark_pp = None
