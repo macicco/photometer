@@ -24,6 +24,7 @@ class AperturePhotometry(traitlets.HasTraits):
     annulus_outer_radius = traitlets.Float()
     aperture_net_counts = traitlets.Float()
     reject_outlying_pix = traitlets.Bool()
+    execute = traitlets.Bool()
 
     '''
     snr = traitlets.Float()
@@ -41,10 +42,11 @@ class AperturePhotometry(traitlets.HasTraits):
         self._N_R = None
         self._N_dark_pp = None
         
-
-    
-    def perform_photometry(self):
-        pass
+    #@traitlets.observe('aperture_radius', 
+                       #'annulus_inner_radius', 
+                       #'annulus_outer_radius')
+    def perform_photometry(self, b):
+        print("Function ran!")
 
     def calc_typical_sky_pix(self):
         pass

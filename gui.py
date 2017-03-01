@@ -4,6 +4,9 @@ from traitlets import Integer, HasTraits, link, Float
 from IPython.display import display
 from reducer.image_browser import FitsViewer
 
+from glowing_waffles.visualization import ImageViewer
+
+
 from model import SourceDetection, AperturePhotometry
 
 class FileSelect(Box):
@@ -52,25 +55,24 @@ class SettingSlider(Box):
                                                 align_items='stretch',
                                                 width='100%'))
     
-class ImageViewer(Box):
+class Image(Box):
     """
     Class that initalizes an image viewer interface for the final GUI
     class. 
     
     """
     def __init__(self,image_path):
-        imageOpen = open(image_path,"rb")
-        image = imageOpen.read()
-        self._viewer = Image(value=image,format='jpg',width=600,height=400)
-        super(ImageViewer, self).__init__(children = [self._viewer],
+        self._viewer = ImageViewer(image_path)
+        super(Image, self).__init__(children = [self._viewer],
                                 layout = Layout(display='flex',
                                                 flex_flow='row',
                                                 align_items='stretch',
-                                                width='50%'))
+                                                width='100%'))
+        
 
 class GUI(Box):
     """
-    Class that combines the FileSelect, SettingSlider, and ImageViewer 
+    Class that combines the FileSelect, SettingSlider, and Image 
     interfaces into a cohesive GUI interface. 
     
     """
@@ -79,7 +81,7 @@ class GUI(Box):
         self._phot_model = AperturePhotometry()
         
         self._file = FileSelect(fileList)
-        self._view = ImageViewer(image_path)
+        self._view = Image(image_path)
         
         self._aperture = SettingSlider("Aperture (pixels)", minimum, maximum)
         link((self._aperture, 'value'),(self._phot_model, 'aperture_radius'))
@@ -93,6 +95,8 @@ class GUI(Box):
         link((self._inner_annulus, 'value'),(self._phot_model, 'annulus_inner_radius'))
         
         self._go = Button(description = 'Go!')
+        self._go.on_click(self._phot_model.perform_photometry)
+        
         super(GUI, self).__init__(children = [self._file, self._view,
                                               self._aperture, self._gap,
                                               self._outer_annulus, 
