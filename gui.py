@@ -77,7 +77,7 @@ class GUI(Box):
     
     """
     def __init__(self, fileList, minimum, maximum, image_path):
-        self._source_model = SourceDetection()
+        self._source_model = SourceDetection(image_path)
         self._phot_model = AperturePhotometry()
         
         self._file = FileSelect(fileList)
